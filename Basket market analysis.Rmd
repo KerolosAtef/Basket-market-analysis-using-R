@@ -1,0 +1,73 @@
+
+```{r}
+#Market busket analysis packages
+
+install.packages("arules")
+install.packages("arulesViz")
+install.packages('reticulate')
+install.packages('keras')
+install.packages("readr")
+install.packages("RColorBrewer")
+
+```
+
+# Market basket analysis 
+
+```{r}
+library(readr)
+library(arules)
+library(arulesViz)
+library(RColorBrewer)
+```
+
+Because of our csv file have the transactions directly ,so i will use read transactions
+```{r}
+data_transactions <- read.transactions("transactions.csv",
+                                       format = 'basket', sep = ',')
+data_transactions
+```
+Let's look at the summary of this transactions object
+```{r}
+summary(data_transactions)
+```
+
+Q1
+```{r}
+itemFrequencyPlot(data_transactions,topN = 10,type='absolute')
+```
+# Generating a assotiation rule with maximum length = 3
+
+```{r}
+association_rule_len3= apriori(data_transactions, parameter = list(maxlen=3,support = 0.002, confidence = 0.20))
+association_rule_len3_sorted = sort(association_rule_len3, by="lift")
+print(inspect(association_rule_len3_sorted))
+```
+
+# Generating a rule with maximum length = 2
+```{r}
+association_rule_len2 <- apriori(data_transactions, parameter = list(maxlen=2,support = 0.002, confidence = 0.20))
+association_rule_len2_sorted <- sort(association_rule_len2, by="lift")
+inspect(association_rule_len2_sorted)
+
+```
+
+Print the highest rules of maxlen =3 and maxlen=2
+```{r}
+# Maxlen=3
+inspect(association_rule_len3_sorted[1])
+# Maxlen = 2
+inspect(association_rule_len2_sorted[1])
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
